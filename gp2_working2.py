@@ -155,7 +155,7 @@ for ny in ny_airports:
 
 equipment_list = []
 
-# List equipment for each route between ny and midpoint
+# List equipment for each route between ny and midpoint and midpoint to sf
 for ny in ny_airports:
     for mid in midpoints:
         if equipCheck(ny, mid) != []:
