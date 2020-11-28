@@ -19,6 +19,7 @@ routes = pd.read_csv('routes.dat.txt', names=['airline',
                                               'stops',
                                               'equipment'])
 
+# Subset routes with 0 or 1 stop
 routes = routes[routes["stops"] <= 1]
 
 
