@@ -49,8 +49,9 @@ routes_from_ny = routes.loc[routes["source_airport"].isin(ny_airports)]
 sf_airports = ['SFO', 'SJC', 'OAK']
 routes_to_sf = routes.loc[routes["destination_airport"].isin(sf_airports)]
                         
-
+# list of airports that fly directly to all sf_airports
 midpoints = list(routes_to_sf["source_airport"])
+midpoints = list(dict.fromkeys(midpoints)) # removes duplicates
 
 # Subset Routes from NY to layover airport between NY and SF
 ny_to_midpoint = routes_from_ny.loc[routes_from_ny["destination_airport"].isin(midpoints)]
@@ -92,16 +93,17 @@ jfk = routes[jfk]
 len(jfk)
 
 
-# There are 7 nonstop flights from JFK to SFO
-jfk_to_sfo = (routes["source_airport"] == "JFK") & (routes["destination_airport"] == "SFO")
-jfk_to_sfo = routes[jfk_to_sfo]
-len(jfk_to_sfo)
+# # There are 7 nonstop flights from JFK to SFO
+# jfk_to_sfo = (routes["source_airport"] == "JFK") & (routes["destination_airport"] == "SFO")
+# jfk_to_sfo = routes[jfk_to_sfo]
+# len(jfk_to_sfo)
 
 
-# There are no direct flights from LGA to SFO
-lga_to_sfo = (routes["source_airport"] == "LGA") & (routes["destination_airport"] == "SFO")
-lga_to_sfo = routes[lga_to_sfo]
-len(lga_to_sfo)
+# # There are no direct flights from LGA to SFO
+# lga_to_sfo = (routes["source_airport"] == "LGA") & (routes["destination_airport"] == "SFO")
+# lga_to_sfo = routes[lga_to_sfo]
+# len(lga_to_sfo)
+
 
 
 def routeCheck(source, destination):
@@ -121,7 +123,24 @@ def routeCheck(source, destination):
     '''
     routes_list = (routes["source_airport"] == f"{source}") & (routes["destination_airport"] == f"{destination}")
     routes_list = routes[routes_list]
-    print(len(routes_list), "direct routes")
+    return len(routes_list)
+    # print(len(routes_list), "direct routes")
+
+# Uses routeCheck to list number of direct flights between all ny_airports and sf_airports
+for ny in ny_airports:
+    for sf in sf_airports:
+        if routeCheck(ny, sf) != 0:
+            print(routeCheck(ny, sf), "routes from", ny, "to", sf)
+
+# Uses routeCheck to find # of routes between ny and midpoint + # of routes from midpoint to sf
+for ny in ny_airports:
+    for mid in midpoints:
+        if routeCheck(ny, mid) != 0:
+            for sf in sf_airports:
+                if routeCheck(mid, sf) != 0:
+                    print(routeCheck(ny, mid), "+", routeCheck(mid, sf), "routes")
+                    # print(routeCheck(ny, mid), "routes from", ny, "to", mid)
+        
 
 
 ny_airports = ['LGA', 'JFK', 'ISP', 'SWF', 'TTN', 'HPN', 'EWR']
