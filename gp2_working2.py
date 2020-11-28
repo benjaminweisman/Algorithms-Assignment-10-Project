@@ -52,10 +52,13 @@ midpoints = list(dict.fromkeys(midpoints)) # removes duplicates
 # Subset Routes from NY to layover airport between NY and SF
 ny_to_midpoint = routes_from_ny.loc[routes_from_ny["destination_airport"].isin(midpoints)]
 
+
+# Subset routes from ny_airports to sf_airports
+ny_to_sf = routes.loc[routes["destination_airport"].isin(sf_airports) & routes["source_airport"].isin(ny_airports)]
                          
 
 # List of all airports with flights to sf airports (not sure if all ny airports should be included in this list)
-source_airports = ny_airports
+source_airports = ny_airports.copy()
 for x in midpoints:
     if x not in source_airports:
         source_airports.append(x)
@@ -117,12 +120,14 @@ for ny in ny_airports:
 nx.edges(G)
 
 
-
+# If >= 1 route between ny and mid, check if there is >= 1 route from mid to sf. If so, add edge from ny to mid and add edge from mid to sf
 for ny in ny_airports:
     for mid in midpoints:
-        if routeCheck(ny, mid) != 0:
-            for sf in sf_airports:
-                if routeCheck(mid, sf) != 0:
+        if routeCheck(ny, mid) != 0: # "if there is at least 1 direct route between ny and mid"
+            for sf in sf_airports: # check if there is a direct route from mid to sf
+                if routeCheck(mid, sf) != 0: # if there is >= 1 direct route between mid and sf
+                    G.add_edge(ny, mid, weight=routeCheck(ny, mid))
+                    G.add_edge(mid, sf, weight=routeCheck(mid, sf))
                     
 
 

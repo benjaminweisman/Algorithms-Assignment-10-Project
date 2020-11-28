@@ -25,7 +25,7 @@ routes = pd.read_csv('routes.dat.txt', names=['airline',
                                               'equipment'])
 
 
-# routes = routes[routes["stops" == 1]]
+routes = routes[routes["stops"] <= 1]
 
 
 planes = pd.read_csv('planes.dat.txt', names = ['aircraft_name',
