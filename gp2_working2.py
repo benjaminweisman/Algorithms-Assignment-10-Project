@@ -1,18 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Wed Nov 25 16:51:47 2020
+Created on Fri Nov 27 22:01:07 2020
 
 @author: julianpalazzo
 """
 
 import pandas as pd
-
-proj = '/Users/julianpalazzo/New College of Florida/Fall Semester 2020/CAP5328 Algorithms for Data Science/Group_Project_2'
-data = '/data/'
-
-
-
+import networkx as nx
 
 routes = pd.read_csv('routes.dat.txt', names=['airline', 
                                               'airline_id',
@@ -25,15 +20,15 @@ routes = pd.read_csv('routes.dat.txt', names=['airline',
                                               'equipment'])
 
 
-# routes = routes[routes["stops" == 1]]
 
 
 planes = pd.read_csv('planes.dat.txt', names = ['aircraft_name',
                                                 'IATA_code',
                                                 'ICAO_code'])
-planes
 
 
+# Initialize NetworkX directed graph
+G = nx.DiGraph()
 
 
 
@@ -55,7 +50,7 @@ midpoints = list(dict.fromkeys(midpoints)) # removes duplicates
 
 # Subset Routes from NY to layover airport between NY and SF
 ny_to_midpoint = routes_from_ny.loc[routes_from_ny["destination_airport"].isin(midpoints)]
-# need to merge this df with the routes_to_sf dataframe?
+
                          
 
 # List of all airports with flights to sf airports (not sure if all ny airports should be included in this list)
@@ -64,7 +59,7 @@ for x in midpoints:
     if x not in source_airports:
         source_airports.append(x)
 
-len(source_airports)                  
+                  
 
 
 def routeCheck(source, destination):
@@ -93,6 +88,11 @@ for ny in ny_airports:
         if routeCheck(ny, sf) != 0:
             print(routeCheck(ny, sf), "routes from", ny, "to", sf)
 
+
+
+
+
+
 # Uses routeCheck to find # of routes between ny and midpoint + # of routes from midpoint to sf
 for ny in ny_airports:
     for mid in midpoints:
@@ -100,58 +100,17 @@ for ny in ny_airports:
             for sf in sf_airports:
                 if routeCheck(mid, sf) != 0:
                     print(routeCheck(ny, mid), "+", routeCheck(mid, sf), "routes")
-                    # print(routeCheck(ny, mid), "routes from", ny, "to", mid)
-        
 
+for ny in ny_airports:
+    for mid in midpoints:
+        if routeCheck(ny, mid) != 0:
+            G.add_edge(ny, mid, weight=routeCheck(ny,mid))
             
-           
-sfo = routes[routes["destination_airport"] == "SFO"]
-len(sfo)
+            # for sf in sf_airports:
+            #     if routeCheck(mid, sf) != 0:
+            #         G.add_edge()
 
-
-# list of airports with flights to SFO
-source_to_sfo = list(sfo["source_airport"])
-len(source_to_sfo)
-
-# # Subset ny_routes for 
-# ny_to_sfo = ny_routes.loc[ny_routes["destination_airport"].isin(source_to_sfo)]
-
-
-
-lga = routes[routes["source_airport"] == "LGA"]
-len(lga)
-
-jfk = routes[routes["source_airport"] == "JFK"]
-len(jfk)
-
-
-# # There are 7 nonstop flights from JFK to SFO
-# jfk_to_sfo = (routes["source_airport"] == "JFK") & (routes["destination_airport"] == "SFO")
-# jfk_to_sfo = routes[jfk_to_sfo]
-# len(jfk_to_sfo)
-
-
-# # There are no direct flights from LGA to SFO
-# lga_to_sfo = (routes["source_airport"] == "LGA") & (routes["destination_airport"] == "SFO")
-# lga_to_sfo = routes[lga_to_sfo]
-# len(lga_to_sfo)
-
-
-
-
-
-
-
-
-
-
-
-
-            
-# Select airports that are midpoint for flights from LGA to SFO        
-lga.loc[lga["destination_airport"].isin(source_to_sfo)]          
-
-
+nx.edges(G)
 
 
 
