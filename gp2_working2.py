@@ -79,8 +79,11 @@ def routeCheck(source, destination):
     '''
     routes_list = (routes["source_airport"] == f"{source}") & (routes["destination_airport"] == f"{destination}")
     routes_list = routes[routes_list]
-    return len(routes_list)
+    return list(routes_list["equipment"])
+    # return len(routes_list)
     # print(len(routes_list), "direct routes")
+
+routeCheck('JFK', 'SFO')
 
 # Uses routeCheck to list number of direct flights between all ny_airports and sf_airports
 for ny in ny_airports:
