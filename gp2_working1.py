@@ -65,45 +65,6 @@ for x in midpoints:
         source_airports.append(x)
 
 len(source_airports)                  
-           
-            
-           
-            
-           
-sfo = routes["destination_airport"] == "SFO"
-sfo = routes[sfo]
-len(sfo)
-
-
-# list of airports with flights to SFO
-source_to_sfo = list(sfo["source_airport"])
-len(source_to_sfo)
-
-# # Subset ny_routes for 
-# ny_to_sfo = ny_routes.loc[ny_routes["destination_airport"].isin(source_to_sfo)]
-
-
-
-lga = routes["source_airport"] == "LGA"
-lga = routes[lga]
-len(lga)
-
-jfk = routes["source_airport"] == "JFK"
-jfk = routes[jfk]
-len(jfk)
-
-
-# # There are 7 nonstop flights from JFK to SFO
-# jfk_to_sfo = (routes["source_airport"] == "JFK") & (routes["destination_airport"] == "SFO")
-# jfk_to_sfo = routes[jfk_to_sfo]
-# len(jfk_to_sfo)
-
-
-# # There are no direct flights from LGA to SFO
-# lga_to_sfo = (routes["source_airport"] == "LGA") & (routes["destination_airport"] == "SFO")
-# lga_to_sfo = routes[lga_to_sfo]
-# len(lga_to_sfo)
-
 
 
 def routeCheck(source, destination):
@@ -141,10 +102,45 @@ for ny in ny_airports:
                     print(routeCheck(ny, mid), "+", routeCheck(mid, sf), "routes")
                     # print(routeCheck(ny, mid), "routes from", ny, "to", mid)
         
+           
+            
+           
+sfo = routes[routes["destination_airport"] == "SFO"]
+len(sfo)
 
 
-ny_airports = ['LGA', 'JFK', 'ISP', 'SWF', 'TTN', 'HPN', 'EWR']
-routes.loc[routes["source_airport"].isin(ny_airports)]
+# list of airports with flights to SFO
+source_to_sfo = list(sfo["source_airport"])
+len(source_to_sfo)
+
+# # Subset ny_routes for 
+# ny_to_sfo = ny_routes.loc[ny_routes["destination_airport"].isin(source_to_sfo)]
+
+
+
+lga = routes[routes["source_airport"] == "LGA"]
+len(lga)
+
+jfk = routes[routes["source_airport"] == "JFK"]
+len(jfk)
+
+
+# # There are 7 nonstop flights from JFK to SFO
+# jfk_to_sfo = (routes["source_airport"] == "JFK") & (routes["destination_airport"] == "SFO")
+# jfk_to_sfo = routes[jfk_to_sfo]
+# len(jfk_to_sfo)
+
+
+# # There are no direct flights from LGA to SFO
+# lga_to_sfo = (routes["source_airport"] == "LGA") & (routes["destination_airport"] == "SFO")
+# lga_to_sfo = routes[lga_to_sfo]
+# len(lga_to_sfo)
+
+
+
+
+
+
 
 
 
@@ -157,7 +153,6 @@ lga.loc[lga["destination_airport"].isin(source_to_sfo)]
 
 
 
-lga[lga["destination_airport"] in source_to_sfo]
 
 
 
