@@ -19,7 +19,7 @@ routes = pd.read_csv('routes.dat.txt', names=['airline',
                                               'stops',
                                               'equipment'])
 
-
+routes = routes[routes["stops"] <= 1]
 
 
 planes = pd.read_csv('planes.dat.txt', names = ['aircraft_name',
@@ -79,8 +79,8 @@ def routeCheck(source, destination):
     '''
     routes_list = (routes["source_airport"] == f"{source}") & (routes["destination_airport"] == f"{destination}")
     routes_list = routes[routes_list]
-    return list(routes_list["equipment"])
-    # return len(routes_list)
+    # return list(routes_list["equipment"])
+    return len(routes_list)
     # print(len(routes_list), "direct routes")
 
 routeCheck('JFK', 'SFO')
@@ -117,6 +117,11 @@ nx.edges(G)
 
 
 
-
+for ny in ny_airports:
+    for mid in midpoints:
+        if routeCheck(ny, mid) != 0:
+            for sf in sf_airports:
+                if routeCheck(mid, sf) != 0:
+                    
 
 
