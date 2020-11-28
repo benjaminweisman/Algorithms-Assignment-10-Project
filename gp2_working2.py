@@ -153,10 +153,20 @@ for ny in ny_airports:
                     
 
 
+equipment_list = []
+
 # List equipment for each route between ny and midpoint
 for ny in ny_airports:
     for mid in midpoints:
         if equipCheck(ny, mid) != []:
             for sf in sf_airports:
                 if equipCheck(mid, sf) != []:
-                    print(equipCheck(ny,mid), equipCheck(mid,sf))
+                    equipment1 = equipCheck(ny,mid)
+                    equipment2 = equipCheck(mid,sf)
+                    for i in equipment1:
+                        equipment_list.append(i)
+                    for i in equipment2:
+                        equipment_list.append(i)
+
+
+equipment_list = list(dict.fromkeys(equipment_list)) # removes duplicates
