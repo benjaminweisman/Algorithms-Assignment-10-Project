@@ -57,11 +57,11 @@ ny_to_midpoint = routes_from_ny.loc[routes_from_ny["destination_airport"].isin(m
 ny_to_sf = routes.loc[routes["destination_airport"].isin(sf_airports) & routes["source_airport"].isin(ny_airports)]
                          
 
-# List of all airports with flights to sf airports (not sure if all ny airports should be included in this list)
-source_airports = ny_airports.copy()
-for x in midpoints:
-    if x not in source_airports:
-        source_airports.append(x)
+# # List of all airports with flights to sf airports (not sure if all ny airports should be included in this list)
+# source_airports = ny_airports.copy()
+# for x in midpoints:
+#     if x not in source_airports:
+#         source_airports.append(x)
 
                   
 
@@ -83,7 +83,6 @@ def routeCheck(source, destination):
     '''
     routes_list = (routes["source_airport"] == f"{source}") & (routes["destination_airport"] == f"{destination}")
     routes_list = routes[routes_list]
-    # return list(routes_list["equipment"])
     return len(routes_list)
     # print(len(routes_list), "direct routes")
 
@@ -189,7 +188,6 @@ for ny in ny_airports:
                         equipment_list.append(i)
                     for i in equipment2:
                         equipment_list.append(i)
-
 
 equipment_list = list(dict.fromkeys(equipment_list)) # removes duplicates
 
