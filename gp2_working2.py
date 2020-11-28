@@ -157,4 +157,6 @@ for ny in ny_airports:
 for ny in ny_airports:
     for mid in midpoints:
         if equipCheck(ny, mid) != []:
-            print(equipCheck(ny,mid))
+            for sf in sf_airports:
+                if equipCheck(mid, sf) != []:
+                    print(equipCheck(ny,mid), equipCheck(mid,sf))
