@@ -53,7 +53,7 @@ midpoints = list(dict.fromkeys(midpoints)) # removes duplicates
 ny_to_midpoint = routes_from_ny.loc[routes_from_ny["destination_airport"].isin(midpoints)]
 
 
-# Subset routes from ny_airports to sf_airports
+# Subset direct routes from ny_airports to sf_airports
 ny_to_sf = routes.loc[routes["destination_airport"].isin(sf_airports) & routes["source_airport"].isin(ny_airports)]
                          
 
@@ -88,6 +88,28 @@ def routeCheck(source, destination):
     # print(len(routes_list), "direct routes")
 
 routeCheck('JFK', 'SFO')
+
+
+def equipCheck(source, destination):
+    '''
+    Parameters
+    ----------
+    source : string
+        source airport code (eg. JFK, LGA)
+    
+    destination: string
+        destination airport code (eg. SFO, OAK, SJC)
+
+    Returns
+    -------
+    list of equipment for each route between source and destination
+    
+    '''
+    routes_list = (routes["source_airport"] == f"{source}") & (routes["destination_airport"] == f"{destination}")
+    routes_list = routes[routes_list]
+    return list(routes_list["equipment"])
+
+
 
 # Uses routeCheck to list number of direct flights between all ny_airports and sf_airports
 for ny in ny_airports:
@@ -131,3 +153,8 @@ for ny in ny_airports:
                     
 
 
+# List equipment for each route between ny and midpoint
+for ny in ny_airports:
+    for mid in midpoints:
+        if equipCheck(ny, mid) != []:
+            print(equipCheck(ny,mid))
