@@ -43,7 +43,14 @@ planes = pd.read_csv('planes.dat.txt', names = ['aircraft_name',
                                                 'ICAO_code'])
 
 
+# # Plane Capacities
+# caps = pd.read_csv('planes_cap.csv', names=['Name', 'Code3', 'Code4', 'Model', 'Capacity',])
 
+# Plane Capacities
+capacity = pd.read_csv('capacity.csv')
+
+
+routes_clean = pd.read_csv('routes_clean.csv')
 
 
 ###############################################################################
@@ -52,11 +59,7 @@ planes = pd.read_csv('planes.dat.txt', names = ['aircraft_name',
 
 ###############################################################################
 
-# # Plane Capacities
-# caps = pd.read_csv('planes_cap.csv', names=['Name', 'Code3', 'Code4', 'Model', 'Capacity',])
 
-# Plane Capacities
-capacity = pd.read_csv('capacity.csv')
 
 # Create dictionary of equipment : capacity values
 cap_dict = pd.Series(capacity.Capacity.values, index = capacity.Code3).to_dict()
