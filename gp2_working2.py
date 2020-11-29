@@ -29,7 +29,7 @@ planes = pd.read_csv('planes.dat.txt', names = ['aircraft_name',
 
 
 # Initialize NetworkX directed graph
-G = nx.DiGraph()
+G = nx.MultiDiGraph()
 
 
 
