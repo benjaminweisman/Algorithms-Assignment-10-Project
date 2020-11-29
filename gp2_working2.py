@@ -171,7 +171,13 @@ for ny in ny_airports:
                 if routeCheck(mid, sf) != 0: # if there is >= 1 direct route between mid and sf
                     G.add_edge(ny, mid, weight=routeCheck(ny, mid))
                     G.add_edge(mid, sf, weight=routeCheck(mid, sf))
-                    
+          
+# Add edges for routes from ny_airports to sf_airports where # of routes >= 1
+for ny in ny_airports:
+    for sf in sf_airports:
+        if routeCheck(ny,sf) != 0:
+            G.add_edge(ny,sf, weight=routeCheck(ny,sf))
+
 
 
 equipment_list = []
@@ -194,7 +200,7 @@ equipment_list = list(dict.fromkeys(equipment_list)) # removes duplicates
 
 
 
-
+# List airlines with routes from ny_airports to midpoints
 for ny in ny_airports:
     for mid in midpoints:
         if airlineCheck(ny,mid) != []:
@@ -203,6 +209,11 @@ for ny in ny_airports:
 
 
 
+# List paths from all ny_airports to all sf_airports
+for ny in ny_airports:
+    for sf in sf_airports:
+        if nx.has_path(G, ny,sf):
+            print(nx.shortest_path(G,ny,sf))
 
 
 
