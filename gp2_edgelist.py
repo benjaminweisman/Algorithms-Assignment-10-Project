@@ -35,7 +35,7 @@ routes = pd.read_csv('routes.dat.txt', names=['airline',
                                               'equipment'])
 
 # Subset routes with 0 or 1 stop
-routes = routes[routes["stops"] <= 1]
+routes = routes[routes["stops"] == 0]
 
 
 planes = pd.read_csv('planes.dat.txt', names = ['aircraft_name',
@@ -183,7 +183,7 @@ for ny in ny_airports:
 
 G.edges()
 for sf in sf_airports:
-    print(G.get_edge_data('MDW', sf))
+    print(G.get_edge_data('SAT', sf))
 
 
 
