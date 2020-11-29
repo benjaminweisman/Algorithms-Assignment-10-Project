@@ -57,7 +57,8 @@ ny_to_midpoint = routes_from_ny.loc[routes_from_ny["destination_airport"].isin(m
 ny_to_sf = routes.loc[routes["destination_airport"].isin(sf_airports) & routes["source_airport"].isin(ny_airports)]
 print("----------------------------")              
 print(ny_to_sf)
-print("----------------------------")  
+print("----------------------------")
+print(list(ny_to_sf['destination_airport']))
 # # List of all airports with flights to sf airports (not sure if all ny airports should be included in this list)
 # source_airports = ny_airports.copy()
 # for x in midpoints:
