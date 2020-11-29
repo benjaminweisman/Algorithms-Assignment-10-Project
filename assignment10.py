@@ -22,7 +22,7 @@ len(list(nx.edges(G)))
 
 for u in G:
     for v in G:
-        if nx.has_path(G,u,v):
+        if u != v and nx.has_path(G,u,v):
             print(G.get_edge_data(u,v))
             
             
