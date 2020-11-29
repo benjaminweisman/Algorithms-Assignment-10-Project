@@ -158,7 +158,7 @@ ny_to_midpoint = routes_from_ny.loc[routes_from_ny["destination_airport"].isin(m
 #                            IDENTIFYING EDGES
 
 ###############################################################################
-    
+
 
 # Direct Edges from NY to SF
 for ny in ny_airports:
@@ -172,13 +172,12 @@ for ny in ny_airports:
     for mid in midpoints:
         if routeCheck(ny,mid) != 0:
             for sf in sf_airports:
-                if (routeCheck(mid, sf) != 0) and (airlineCheck(ny,mid)==airlineCheck(mid,sf)):
+                if (routeCheck(mid, sf) != 0) and list(set(airlineCheck(ny,mid)) & set(airlineCheck(mid,sf))) != []:
                     carriers = list(set(airlineCheck(ny,mid)) & set(airlineCheck(mid,sf)))
                     for c in carriers:
                         G.add_edge(ny,mid, weight='CAPACITY', carrier=c)
                         G.add_edge(mid, sf, weight='CAPACITY', carrier=c)
-                    print(carriers)
-                    # print(airlineCheck(ny,mid),airlineCheck(mid,sf))
+
                     
 
 G.edges()
