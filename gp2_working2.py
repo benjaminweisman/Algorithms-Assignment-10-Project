@@ -26,7 +26,8 @@ routes = routes[routes["stops"] <= 1]
 planes = pd.read_csv('planes.dat.txt', names = ['aircraft_name',
                                                 'IATA_code',
                                                 'ICAO_code'])
-
+# Read in Airplane Code + Capacity data
+cap = pd.read_csv('Code Cap.csv', index_col=0)
 
 # Initialize NetworkX directed graph
 G = nx.DiGraph()
