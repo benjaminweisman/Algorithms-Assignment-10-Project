@@ -133,6 +133,26 @@ def airlineCheck(source, destination):
     routes_list = routes[routes_list]
     return list(routes_list["airline"])
 
+def capacityCheck(source, destination, carrier):
+        '''
+    Parameters
+    ----------
+    source : string
+        source airport code (eg. JFK, LGA)
+    
+    destination: string
+        destination airport code (eg. SFO, OAK, SJC)
+        
+    carrier: string
+        airline carrier for a given route
+
+    Returns
+    -------
+    capacity of route between source and destination for a given airline
+    
+    '''
+
+    
 
 ###############################################################################
 
