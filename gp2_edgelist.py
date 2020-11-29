@@ -42,6 +42,13 @@ planes = pd.read_csv('planes.dat.txt', names = ['aircraft_name',
                                                 'IATA_code',
                                                 'ICAO_code'])
 
+# Plane Capacities
+caps = pd.read_csv('planes_cap.csv', names=['Name', 
+                                              'Code3',
+                                              'Code4',
+                                              'Model',
+                                              'Capacity',])
+
 
 
 
@@ -180,6 +187,7 @@ for ny in ny_airports:
 
                     
 
+print(carriers)
 G.edges()
 for sf in sf_airports:
     print(G.get_edge_data('SAT', sf))
