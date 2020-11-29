@@ -42,14 +42,27 @@ planes = pd.read_csv('planes.dat.txt', names = ['aircraft_name',
                                                 'IATA_code',
                                                 'ICAO_code'])
 
+
+
+
+
+###############################################################################
+
+#                    REPLACE EQUIPMENT VALUES WITH CAPACITY
+
+###############################################################################
+
+# # Plane Capacities
+# caps = pd.read_csv('planes_cap.csv', names=['Name', 'Code3', 'Code4', 'Model', 'Capacity',])
+
 # Plane Capacities
-caps = pd.read_csv('planes_cap.csv', names=['Name', 
-                                              'Code3',
-                                              'Code4',
-                                              'Model',
-                                              'Capacity',])
+capacity = pd.read_csv('capacity.csv')
 
+# Create dictionary of equipment : capacity values
+cap_dict = pd.Series(capacity.Capacity.values, index = capacity.Code3).to_dict()
 
+# Replace equipment keys with their associated capacity values
+routes.replace(to_replace=cap_dict, value=None)
 
 
 ###############################################################################
