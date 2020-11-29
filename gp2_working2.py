@@ -27,6 +27,13 @@ planes = pd.read_csv('planes.dat.txt', names = ['aircraft_name',
                                                 'IATA_code',
                                                 'ICAO_code'])
 
+# Plane Capacities
+caps = pd.read_csv('planes_cap.csv', names=['Name', 
+                                              'Code3',
+                                              'Code4',
+                                              'Model',
+                                              'Capacity',])
+
 
 # Initialize NetworkX directed graph
 G = nx.MultiDiGraph()
