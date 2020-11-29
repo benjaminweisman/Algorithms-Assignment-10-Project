@@ -65,7 +65,7 @@ print(list(ny_to_sf['destination_airport']))
 #     if x not in source_airports:
 #         source_airports.append(x)
 
-                  
+                   
 
 
 def routeCheck(source, destination):
