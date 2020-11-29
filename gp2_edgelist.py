@@ -167,7 +167,7 @@ for ny in ny_airports:
             G.add_edge(ny,sf,weight='CAPACITY') # CHANGE THIS WEIGHT VALUE ONCE WE HAVE CAPACITY SORTED OUT
             
 
-
+# Finding routes ny -> midpoint -> sf where the carrier is the same on both legs
 for ny in ny_airports:
     for mid in midpoints:
         if routeCheck(ny,mid) != 0:
