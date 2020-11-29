@@ -170,13 +170,13 @@ for ny in ny_airports:
 # Finding routes ny -> midpoint -> sf where the carrier is the same on both legs
 for ny in ny_airports:
     for mid in midpoints:
-        if routeCheck(ny,mid) != 0:
+        if routeCheck(ny,mid) != 0:                                                                                 # if there is a route from ny -> mid, find all sf airports with route from mid
             for sf in sf_airports:
-                if (routeCheck(mid, sf) != 0) and list(set(airlineCheck(ny,mid)) & set(airlineCheck(mid,sf))) != []:
-                    carriers = list(set(airlineCheck(ny,mid)) & set(airlineCheck(mid,sf)))
-                    for c in carriers:
-                        G.add_edge(ny,mid, weight='CAPACITY', carrier=c)
-                        G.add_edge(mid, sf, weight='CAPACITY', carrier=c)
+                if (routeCheck(mid, sf) != 0) and list(set(airlineCheck(ny,mid)) & set(airlineCheck(mid,sf))) != []: # if the same airline has routes ny -> mid and mid -> sf, then
+                    carriers = list(set(airlineCheck(ny,mid)) & set(airlineCheck(mid,sf)))                           # creates list of airlines with routes ny -> mid and mid -> sf
+                    for c in carriers:                                                                              # for each carrier with routes ny -> mid and mid -> sf
+                        G.add_edge(ny,mid, weight='CAPACITY', carrier=c)                                            # add an edge for each carrier with a route from ny -> mid
+                        G.add_edge(mid, sf, weight='CAPACITY', carrier=c)                                           # add an edge for the same carrier with a route from mid -> sf
 
                     
 
