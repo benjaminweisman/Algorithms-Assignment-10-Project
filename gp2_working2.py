@@ -55,13 +55,15 @@ ny_to_midpoint = routes_from_ny.loc[routes_from_ny["destination_airport"].isin(m
 
 # Subset direct routes from ny_airports to sf_airports
 ny_to_sf = routes.loc[routes["destination_airport"].isin(sf_airports) & routes["source_airport"].isin(ny_airports)]
-                         
-
-# List of all airports with flights to sf airports (not sure if all ny airports should be included in this list)
-source_airports = ny_airports.copy()
-for x in midpoints:
-    if x not in source_airports:
-        source_airports.append(x)
+print("----------------------------")              
+print(ny_to_sf)
+print("----------------------------")
+print(list(ny_to_sf['destination_airport']))
+# # List of all airports with flights to sf airports (not sure if all ny airports should be included in this list)
+# source_airports = ny_airports.copy()
+# for x in midpoints:
+#     if x not in source_airports:
+#         source_airports.append(x)
 
                   
 
@@ -83,7 +85,6 @@ def routeCheck(source, destination):
     '''
     routes_list = (routes["source_airport"] == f"{source}") & (routes["destination_airport"] == f"{destination}")
     routes_list = routes[routes_list]
-    # return list(routes_list["equipment"])
     return len(routes_list)
     # print(len(routes_list), "direct routes")
 
@@ -108,6 +109,28 @@ def equipCheck(source, destination):
     routes_list = (routes["source_airport"] == f"{source}") & (routes["destination_airport"] == f"{destination}")
     routes_list = routes[routes_list]
     return list(routes_list["equipment"])
+
+
+
+def airlineCheck(source, destination):
+    '''
+    Parameters
+    ----------
+    source : string
+        source airport code (eg. JFK, LGA)
+    
+    destination: string
+        destination airport code (eg. SFO, OAK, SJC)
+
+    Returns
+    -------
+    list of airlines with route between source and destination
+    
+    '''
+    routes_list = (routes["source_airport"] == f"{source}") & (routes["destination_airport"] == f"{destination}")
+    routes_list = routes[routes_list]
+    return list(routes_list["airline"])
+    
 
 
 
@@ -150,13 +173,53 @@ for ny in ny_airports:
                 if routeCheck(mid, sf) != 0: # if there is >= 1 direct route between mid and sf
                     G.add_edge(ny, mid, weight=routeCheck(ny, mid))
                     G.add_edge(mid, sf, weight=routeCheck(mid, sf))
-                    
+          
+# Add edges for routes from ny_airports to sf_airports where # of routes >= 1
+for ny in ny_airports:
+    for sf in sf_airports:
+        if routeCheck(ny,sf) != 0:
+            G.add_edge(ny,sf, weight=routeCheck(ny,sf))
 
 
-# List equipment for each route between ny and midpoint
+
+equipment_list = []
+
+# List equipment for each route between ny and midpoint and midpoint to sf
 for ny in ny_airports:
     for mid in midpoints:
         if equipCheck(ny, mid) != []:
             for sf in sf_airports:
                 if equipCheck(mid, sf) != []:
-                    print(equipCheck(ny,mid), equipCheck(mid,sf))
+                    equipment1 = equipCheck(ny,mid)
+                    equipment2 = equipCheck(mid,sf)
+                    for i in equipment1:
+                        equipment_list.append(i)
+                    for i in equipment2:
+                        equipment_list.append(i)
+
+equipment_list = list(dict.fromkeys(equipment_list)) # removes duplicates
+
+
+
+
+# List airlines with routes from ny_airports to midpoints
+for ny in ny_airports:
+    for mid in midpoints:
+        if airlineCheck(ny,mid) != []:
+            print(airlineCheck(ny,mid))
+        
+
+
+
+# List paths from all ny_airports to all sf_airports
+for ny in ny_airports:
+    for sf in sf_airports:
+        if nx.has_path(G, ny,sf):
+            print(nx.shortest_path(G,ny,sf))
+
+
+
+
+
+
+
