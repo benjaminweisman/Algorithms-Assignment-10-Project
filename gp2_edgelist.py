@@ -171,7 +171,8 @@ ny_to_midpoint = routes_from_ny.loc[routes_from_ny["destination_airport"].isin(m
 for ny in ny_airports:
     for sf in sf_airports:
         if routeCheck(ny, sf) != 0:
-            G.add_edge(ny,sf,weight='CAPACITY') # CHANGE THIS WEIGHT VALUE ONCE WE HAVE CAPACITY SORTED OUT
+            for c in airlineCheck(ny,sf):               # add an edge for each airline with a route from ny to sf
+                G.add_edge(ny,sf,weight='CAPACITY', carrier=c) # CHANGE THIS WEIGHT VALUE ONCE WE HAVE CAPACITY SORTED OUT
             
 
 # Finding routes ny -> midpoint -> sf where the carrier is the same on both legs
