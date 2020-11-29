@@ -173,10 +173,17 @@ for ny in ny_airports:
         if routeCheck(ny,mid) != 0:
             for sf in sf_airports:
                 if (routeCheck(mid, sf) != 0) and (airlineCheck(ny,mid)==airlineCheck(mid,sf)):
-                    print(airlineCheck(ny,mid)==airlineCheck(mid,sf))
+                    carriers = list(set(airlineCheck(ny,mid)) & set(airlineCheck(mid,sf)))
+                    for c in carriers:
+                        G.add_edge(ny,mid, weight='CAPACITY', carrier=c)
+                        G.add_edge(mid, sf, weight='CAPACITY', carrier=c)
+                    print(carriers)
+                    # print(airlineCheck(ny,mid),airlineCheck(mid,sf))
                     
 
-
+G.edges()
+for sf in sf_airports:
+    print(G.get_edge_data('MDW', sf))
 
 
 
