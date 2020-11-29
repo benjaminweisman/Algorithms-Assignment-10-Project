@@ -1,0 +1,191 @@
+col1,Name,Capacity
+100,Fokker 100,122
+141,BAe 146-100,100
+142,BAe 146-200,100
+143,BAe 146-300,100
+146,BAe 146,100
+310,Airbus A310,247
+313,,91
+318,Airbus A318,117
+319,Airbus A319,142
+320,Airbus A320,179
+321,Airbus A321,220
+32A,,91
+32B,,91
+32C,,91
+32S,,91
+330,Airbus A330,380
+330,Airbus A330,412
+332,Airbus A330-200,380
+333,Airbus A330-300,412
+33X,,91
+340,Airbus A340,359
+340,Airbus A340,335
+340,Airbus A340,419
+340,Airbus A340,360
+342,Airbus A340-200,360
+343,Airbus A340-300,335
+345,Airbus A340-500,359
+346,Airbus A340-600,419
+380,Airbus A380,555
+388,Airbus A380-800,555
+717,Boeing 717,117
+732,Boeing 737-200,130
+733,Boeing 737-300,149
+734,Boeing 737-400,168
+735,Boeing 737-500,132
+736,Boeing 737-600,132
+737,Boeing 737,132
+737,Boeing 737,189
+737,Boeing 737,99
+737,Boeing 737,189
+737,Boeing 737,149
+737,Boeing 737,132
+737,Boeing 737,168
+737,Boeing 737,130
+737,Boeing 737,149
+738,Boeing 737-800,189
+739,Boeing 737-900,189
+73C,,91
+73G,Boeing 737-700,149
+73H,,91
+73J,,91
+73M,,91
+73N,,91
+73Q,,91
+73R,,91
+73W,,91
+744,Boeing 747-400,568
+744,Boeing 747-400,524
+747,Boeing 747,505
+747,Boeing 747,370
+747,Boeing 747,568
+747,Boeing 747,422
+747,Boeing 747,550
+747,Boeing 747,524
+74E,,91
+74H,,91
+74L,Boeing 747SP,370
+74M,,91
+74N,,91
+74Y,,91
+752,Boeing 757-200,300
+753,Boeing 757-300,300
+757,Boeing 757,300
+75T,,91
+75W,,91
+762,Boeing 767-200,290
+763,Boeing 767-300,290
+764,Boeing 767-400,290
+767,Boeing 767,290
+76F,,91
+76W,,91
+772,Boeing 777-200,451
+773,Boeing 777-300,451
+777,Boeing 777,451
+77L,Boeing 777-200LR,451
+77W,Boeing 777-300ER,451
+77X,,91
+787,,91
+788,,91
+A40,,91
+A58,,91
+A81,,91
+AB4,,91
+AB6,Airbus A300-600,360
+AN4,,91
+AR1,,91
+AR8,,91
+ARJ,,91
+AT4,Aerospatiale/Alenia ATR 42-300,46
+AT5,Aerospatiale/Alenia ATR 42-500,46
+AT7,Aerospatiale/Alenia ATR 72,66
+ATP,,91
+ATR,,91
+BE1,,91
+BE9,,91
+BEC,,91
+BEH,,91
+BET,,91
+BH2,,91
+BNI,,91
+BNT,,91
+CN1,,91
+CN2,,91
+CNA,,91
+CNC,,91
+CNJ,,91
+CNT,,91
+CR2,Canadair Regional Jet 200,50
+CR7,Canadair Regional Jet 700,74
+CR9,Canadair Regional Jet 900,86
+CRA,,91
+CRJ,,91
+CRK,,91
+D1C,,91
+D28,,91
+D38,,91
+D93,Douglas DC-9-30,115
+DC9,,91
+DH1,De Havilland Canada DHC-8-100 Dash 8 / 8Q,39
+DH2,De Havilland Canada DHC-8-200 Dash 8 / 8Q,39
+DH3,De Havilland Canada DHC-8-300 Dash 8,56
+DH4,De Havilland Canada DHC-8-400 Dash 8Q,78
+DH7,De Havilland Canada DHC-7 Dash 7,50
+DH8,,91
+DHL,,91
+DHP,,91
+DHT,De Havilland Canada DHC-6 Twin Otter,19
+E70,Embraer 170,78
+E75,,91
+E90,Embraer 190,108
+E95,,91
+EM2,,91
+EMB,,91
+EMJ,,91
+ER3,Embraer RJ135,37
+ER3,Embraer Legacy 600,37
+ER4,Embraer RJ145,50
+ERD,,91
+ERJ,,91
+F28,,91
+F50,Fokker 50,50
+F70,Fokker 70,85
+FRJ,,91
+I14,Ilyushin IL114,64
+I14,Ilyushin IL114,0
+IL9,,91
+J31,British Aerospace Jetstream 31,19
+J32,,91
+J41,British Aerospace Jetstream 41,29
+L4T,,91
+M11,McDonnell Douglas MD-11,410
+M1F,,91
+M80,,91
+M82,McDonnell Douglas MD-82,172
+M83,McDonnell Douglas MD-83,172
+M87,McDonnell Douglas MD-87,139
+M88,McDonnell Douglas MD-88,172
+M90,McDonnell Douglas MD-90,178
+MA6,,91
+NDE,,91
+PA1,,91
+PA2,,91
+PAG,,91
+PL2,,91
+S20,Saab 2000,50
+S76,,91
+SF3,Saab SF340A/B,35
+SFB,,91
+SH6,,91
+SU9,,91
+SWM,,91
+T20,Tupolev Tu-204,214
+T20,Tupolev Tu-204,214
+TU3,Tupolev Tu-134,76
+TU5,Tupolev Tu-154,180
+YK2,Yakovlev Yak-42,120
+YK4,,91
+YN2,,91
+YN7,,91
+,,91

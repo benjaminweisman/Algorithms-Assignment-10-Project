@@ -1,0 +1,34 @@
+---
+title: "Data Wrangling"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+
+```
+
+```{r}
+routes_dat <- routes_dat %>% separate(X9, paste0('col',c(1:10)), sep = ' ', remove = T )
+routes_clean <- routes_dat[,colSums(is.na(routes_dat))<nrow(routes_dat)]
+routes_clean
+```
+
+```{r}
+routes_clean
+equip_list <- distinct(routes_clean, col1)
+
+equip_list2 <- distinct(routes_clean, col2)
+names(equip_list2)[names(equip_list2)=="col2"] <- "col1"
+
+equip_listmaster <- rbind(equip_list, equip_list2)
+
+equip_listmaster <- distinct(equip_listmaster, col1)
+
+equip_listmaster
+```
+
