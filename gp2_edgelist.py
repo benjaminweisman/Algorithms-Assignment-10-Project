@@ -306,6 +306,8 @@ for ny in ny_airports:
         print("Max Flow from", ny,"to", sf,"is",  nx.maximum_flow(G, ny,sf)[0])
         allFlows.append(nx.maximum_flow(G, ny,sf)[0])
 maxFlow = sum(allFlows)
+
+print("PROBLEM 1 SOLUTION \n")
 print("Maximum Flow:", maxFlow)
 
 
@@ -413,6 +415,8 @@ for c in airline_list:
         maxMaxFlow = maxFlow
         maxFlowCarrier = c
 
+print("\n \n")
+print("PROBLEM 2 SOLUTION \n")
 print("Max Flow Carrier:", maxFlowCarrier, "\nMax Flow Capacity:", maxMaxFlow, "passengers")
 
     
