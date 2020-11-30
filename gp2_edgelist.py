@@ -15,7 +15,7 @@ Created on Sun Nov 29 16:16:54 2020
 
 import pandas as pd
 import networkx as nx
-
+import matplotlib.pyplot as mp
 
 
 ###############################################################################
@@ -261,7 +261,8 @@ for ny in ny_airports:
 # for sf in sf_airports:
 #     print(G.get_edge_data('SAT', sf))
 
-
+nx.draw_networkx(G)
+mp.show()
 
 
 
