@@ -316,6 +316,50 @@ print("Maximum Flow:", maxFlow)
 
 ###############################################################################
 
+
+def routeCheckR(source, destination, df):
+    '''
+    Parameters
+    ----------
+    source : string
+        source airport code (eg. JFK, LGA)
+    
+    destination: string
+        destination airport code (eg. SFO, OAK, SJC)
+
+    Returns
+    -------
+    number of direct routes between source and destination
+    
+    '''
+    routes_list = (df["source_airport"] == f"{source}") & (df["destination_airport"] == f"{destination}")
+    routes_list = df[routes_list]
+    return len(routes_list)
+
+def capacityCheckR(source, destination, carrier, df):
+    '''
+    Parameters
+    ----------
+    source : string
+        source airport code (eg. JFK, LGA)
+    
+    destination: string
+        destination airport code (eg. SFO, OAK, SJC)
+        
+    carrier: string
+        airline carrier for a given route
+
+    Returns
+    -------
+    capacity of route between source and destination for a given airline
+    
+    '''
+    # cap = 0
+    routes_list = (df["source_airport"] == f"{source}") & (df["destination_airport"] == f"{destination}") & (df["airline"] == f"{carrier}")
+    routes_list = df[routes_list]
+    return sum(routes_list["totalcap"])
+
+
 airline_list = [] # list of carriers for edges in G
 
 
@@ -340,86 +384,45 @@ for ny in ny_airports:
 airline_list = list(dict.fromkeys(airline_list)) # removes duplicates
 
 
+maxMaxFlow = 0
 
 for c in airline_list:
-    routes = routes[routes["airline"] == f"{c}"]
-    print(routes)
-    c = nx.DiGraph()
+    r = routes[routes["airline"] == f"{c}"] # subset routes df for each airline
+    M = nx.DiGraph()                        # initialize Directed Graph
+    
+    for ny in ny_airports:
+        for sf in sf_airports:
+            if routeCheckR(ny, sf, r) != 0:
+                M.add_edge(ny,sf, capacity=capacityCheckR(ny,sf, c, r)) # add edges for direct routes ny -> sf
+    
+    for ny in ny_airports:
+        for mid in midpoints:
+            if routeCheck(ny,mid) != 0:                                                                               
+                for sf in sf_airports:
+                    if (routeCheck(mid, sf) != 0):
+                        M.add_edge(ny,mid,capacity=capacityCheckR(ny, mid, c, r))
+                        M.add_edge(mid, sf,capacity=capacityCheckR(mid, sf, c, r))
+    maxFlow = 0
+    for ny in ny_airports:
+        for sf in sf_airports:
+            flow = nx.maximum_flow(M, ny,sf)[0]
+            if flow >= maxFlow:
+                maxFlow = flow
+    
+    if maxFlow >= maxMaxFlow:
+        maxMaxFlow = maxFlow
+        maxFlowCarrier = c
+
+print("Max Flow Carrier:", maxFlowCarrier, "\nMax Flow Capacity:", maxMaxFlow, "passengers")
+
+    
+    
+    
+    
+    
+    
 
     
 
 
 
-# RESET
-routes = pd.read_csv('holy_grail.csv')
-routes = routes[routes["stops"] == 0]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# totalFlow = 0
-# for ny in ny_airports:
-#     maxFlow = 0
-#     for sf in sf_airports:
-#         totalFlow += nx.maximum_flow(G, ny,sf)[0]
-
-
-                        
-
-# totalFlow = 0
-# for ny in ny_airports:
-#     maxFlow = 0
-#     for sf in sf_airports:
-#         flow = nx.maximum_flow(G, ny,sf)[0]
-#         if flow > maxFlow:
-#             source = ny
-#             dest = sf
-#             maxFlow = flow
-#         totalFlow += maxFlow
-#     # print("Maximum Flow:", maxFlow, "from", source, "to", dest)           
-            
-
-
-
-# print(carriers)
-# G.edges()
-# for sf in sf_airports:
-#     print(G.get_edge_data('SAT', sf))
-
-# nx.draw_networkx(G)
-# mp.show()
-
-
-
-
-# for ny in ny_airports:
-#     for sf in sf_airports:
-#         if nx.has_path(G,ny,sf):
-#             print(nx.shortest_path(G,ny,sf))
-            
-# for mid in midpoints:
-#     test = (routes["source_airport"] == "TTN") & (routes['destination_airport'] == mid)
-#     test = routes[test]
-#     if 
-#     print(test)
