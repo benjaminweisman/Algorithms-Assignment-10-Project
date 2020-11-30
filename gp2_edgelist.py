@@ -297,7 +297,43 @@ for ny in ny_airports:
                         G.add_edge(mid,sf,capacity=capacityCheck(mid, sf,c), carrier=c)                                           # add an edge for the same carrier with a route from mid -> sf
                         
 
+
+
+allFlows = []
+for ny in ny_airports:
+    for sf in sf_airports:
+        print("Max Flow from", ny,"to", sf,"is",  nx.maximum_flow(G, ny,sf)[0])
+        allFlows.append(nx.maximum_flow(G, ny,sf)[0])
+maxFlow = sum(allFlows)
+print("Maximum Flow:", maxFlow)
+
+
+
+# totalFlow = 0
+# for ny in ny_airports:
+#     maxFlow = 0
+#     for sf in sf_airports:
+#         totalFlow += nx.maximum_flow(G, ny,sf)[0]
+
+
                         
+
+
+
+# totalFlow = 0
+# for ny in ny_airports:
+#     maxFlow = 0
+#     for sf in sf_airports:
+#         flow = nx.maximum_flow(G, ny,sf)[0]
+#         if flow > maxFlow:
+#             source = ny
+#             dest = sf
+#             maxFlow = flow
+#         totalFlow += maxFlow
+#     # print("Maximum Flow:", maxFlow, "from", source, "to", dest)           
+            
+
+
 
 # print(carriers)
 # G.edges()
@@ -314,11 +350,6 @@ for ny in ny_airports:
 #     for sf in sf_airports:
 #         if nx.has_path(G,ny,sf):
 #             print(nx.shortest_path(G,ny,sf))
-
-for ny in ny_airports:
-    for sf in sf_airports:
-        print(nx.maximum_flow(G, ny,sf))            
-            
             
 # for mid in midpoints:
 #     test = (routes["source_airport"] == "TTN") & (routes['destination_airport'] == mid)
