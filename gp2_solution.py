@@ -387,39 +387,52 @@ for ny in ny_airports:
 airline_list = list(dict.fromkeys(airline_list)) # removes duplicates
 
 
-maxMaxFlow = 0
-
+solution = 0
 for c in airline_list:
-    r = routes[routes["airline"] == f"{c}"] # subset routes df for each airline
-    M = nx.DiGraph()                        # initialize Directed Graph
-    
-    for ny in ny_airports:
-        for sf in sf_airports:
-            if routeCheckR(ny, sf, r) != 0:
-                M.add_edge(ny,sf, capacity=capacityCheckR(ny,sf, c, r)) # add edges for direct routes ny -> sf
-    
+    r = routes[routes["airline"] == f"{c}"]
+    M = nx.DiGraph()
     for ny in ny_airports:
         for mid in midpoints:
-            if routeCheck(ny,mid) != 0:                                                                               
-                for sf in sf_airports:
-                    if (routeCheck(mid, sf) != 0):
-                        M.add_edge(ny,mid,capacity=capacityCheckR(ny, mid, c, r))
-                        M.add_edge(mid, sf,capacity=capacityCheckR(mid, sf, c, r))
-    maxFlow = 0
-    for ny in ny_airports:
-        for sf in sf_airports:
-            if nx.has_path(M, ny, sf):
-                flow = nx.maximum_flow(M, ny,sf)[0]
-            if flow >= maxFlow:
-                maxFlow = flow
-    
-    if maxFlow >= maxMaxFlow:
-        maxMaxFlow = maxFlow
-        maxFlowCarrier = c
+            for sf in sf_airports:
+                if routeCheckR(ny,sf,r):
+                    M.add_edge(ny,sf, capacity = capacityCheckR(ny,sf,c,r))
+                    
+                    # print("LINE ONE",capacityCheckR(ny,sf,c,r))
+                    
+                if routeCheckR(ny,mid,r) and routeCheckR(mid,sf,r):
+                    M.add_edge(ny,mid,capacity = capacityCheckR(ny,mid,c,r))
+                    M.add_edge(mid,sf,capacity = capacityCheckR(mid,sf,c,r))
+                    
+                    # print("LINE TWO",capacityCheckR(ny,mid,c,r), capacityCheckR(mid,sf,c,r)) # the problem is with capacityCheckR?
+    for u in M:
+        for v in M:
+            if u != v:
+                flowC = nx.maximum_flow(M,u,v)[0]
+                if flowC >= solution:
+                    solution = flowC
+                    maxFlowCarrier = c
+                    
+                    
+                    
+    # print(c, M.edges())
+
+
 
 print("\n \n")
 print("PROBLEM 2 SOLUTION \n")
-print("Max Flow Carrier:", maxFlowCarrier, "\nMax Flow Capacity:", maxMaxFlow, "passengers")
+print("Max Flow Carrier:", maxFlowCarrier, "\nMax Flow Capacity:", solution, "passengers")
+
+
+
+
+
+
+
+
+
+
+
+
 
     
     

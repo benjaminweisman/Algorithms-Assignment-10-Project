@@ -360,13 +360,13 @@ def capacityCheckR(source, destination, carrier, df):
     # cap = 0
     routes_list = (df["source_airport"] == f"{source}") & (df["destination_airport"] == f"{destination}") & (df["airline"] == f"{carrier}")
     routes_list = df[routes_list]
-    return sum(routes_list["totalcap"])
+    return int(routes_list["totalcap"])
 
 
 airline_list = [] # list of carriers for edges in G
 
 
-# Direct Edges from NY to SF
+# Carriers for Direct Edges from NY to SF
 for ny in ny_airports:
     for sf in sf_airports:
         if routeCheck(ny, sf) != 0:
@@ -374,7 +374,7 @@ for ny in ny_airports:
                 airline_list.append(c)
 
 
-# Finding routes ny -> midpoint -> sf where the carrier is the same on both legs
+# Carriers with routes ny -> midpoint -> sf where the carrier is the same on both legs
 for ny in ny_airports:
     for mid in midpoints:
         if routeCheck(ny,mid) != 0:                                                                                 # if there is a route from ny -> mid, find all sf airports with route from mid
@@ -399,13 +399,13 @@ for c in airline_list:
             if routeCheckR(ny, sf, r) != 0:
                 M.add_edge(ny,sf, capacity=capacityCheckR(ny,sf, c, r)) # add edges for direct routes ny -> sf
     
-    # for ny in ny_airports:
-    #     for mid in midpoints:
-    #         if routeCheckR(ny,mid,r) != 0:                                                                               
-    #             for sf in sf_airports:
-    #                 if (routeCheckR(mid, sf, r) != 0):
-    #                     M.add_edge(ny,mid,capacity=capacityCheckR(ny, mid, c, r))
-    #                     M.add_edge(mid, sf,capacity=capacityCheckR(mid, sf, c, r))
+    for ny in ny_airports:
+        for mid in midpoints:
+            if routeCheckR(ny,mid,r) != 0:                                                                               
+                for sf in sf_airports:
+                    if (routeCheckR(mid, sf, r) != 0):
+                        M.add_edge(ny,mid,capacity=capacityCheckR(ny, mid, c, r))
+                        M.add_edge(mid, sf,capacity=capacityCheckR(mid, sf, c, r))
     maxFlow = 0
     for ny in ny_airports:
         for sf in sf_airports:
@@ -425,11 +425,105 @@ print("Max Flow Carrier:", maxFlowCarrier, "\nMax Flow Capacity:", maxMaxFlow, "
     
     
     
+#                       SCRATCH WORK BELOW
     
+# RUN THIS CHUNK TO SEE WHAT'S HAPPENING
+for c in airline_list:
+    r = routes[routes["airline"] == f"{c}"]
+    M = nx.DiGraph()
+    for ny in ny_airports:
+        for mid in midpoints:
+            for sf in sf_airports:
+                if routeCheckR(ny,sf,r):
+                    M.add_edge(ny,sf, capacity = capacityCheckR(ny,sf,c,r))
+                if routeCheckR(ny,mid,r) and routeCheckR(mid,sf,r):
+                    M.add_edge(ny,mid,capacity = capacityCheckR(ny,mid,c,r))
+                    M.add_edge(mid,sf,capacity = capacityCheckR(mid,sf,c,r))                    
+    print(c, M.edges())
+
+
+# THIS IS THE SOLUTION
+solution = 0
+for c in airline_list:
+    r = routes[routes["airline"] == f"{c}"]
+    M = nx.DiGraph()
+    for ny in ny_airports:
+        for mid in midpoints:
+            for sf in sf_airports:
+                if routeCheckR(ny,sf,r):
+                    M.add_edge(ny,sf, capacity = capacityCheckR(ny,sf,c,r))
+                    
+                    # print("LINE ONE",capacityCheckR(ny,sf,c,r))
+                    
+                if routeCheckR(ny,mid,r) and routeCheckR(mid,sf,r):
+                    M.add_edge(ny,mid,capacity = capacityCheckR(ny,mid,c,r))
+                    M.add_edge(mid,sf,capacity = capacityCheckR(mid,sf,c,r))
+                    
+                    # print("LINE TWO",capacityCheckR(ny,mid,c,r), capacityCheckR(mid,sf,c,r)) # the problem is with capacityCheckR?
+    for u in M:
+        for v in M:
+            if u != v:
+                flowC = nx.maximum_flow(M,u,v)[0]
+                if flowC >= solution:
+                    solution = flowC
+                    
+                    
+                    
+    # print(c, M.edges())
+
+print("SOLUTION:", solution)
+
+
+
+
+
+## Checking the function results before adding edges
+# for c in airline_list:
+#     r = routes[routes["airline"] == f"{c}"]
+
+#     for ny in ny_airports:
+#         for mid in midpoints:
+#             if routeCheckR(ny,mid,r):
+#                 for sf in sf_airports:
+#                     if routeCheckR(mid,sf,r):
+#                         print(ny,mid,routeCheckR(ny,mid,r), mid, sf, routeCheckR(mid, sf, r))
+#                         print(capacityCheckR(ny,mid,c,r), capacityCheckR(mid,sf,c,r))
+
+
+
+# #                   BROKEN SOLUTION
+
+
+# maxMaxFlow = 0
+
+# for c in airline_list:
+#     r = routes[routes["airline"] == f"{c}"] # subset routes df for each airline
+#     M = nx.DiGraph()                        # initialize Directed Graph
     
+#     for ny in ny_airports:
+#         for sf in sf_airports:
+#             if routeCheckR(ny, sf, r) != 0:
+#                 M.add_edge(ny,sf, capacity=capacityCheckR(ny,sf, c, r)) # add edges for direct routes ny -> sf
     
-
+#     for ny in ny_airports:
+#         for mid in midpoints:
+#             if routeCheckR(ny,mid,r) != 0:                                                                               
+#                 for sf in sf_airports:
+#                     if (routeCheckR(mid, sf,r) != 0):
+#                         M.add_edge(ny,mid,capacity=capacityCheckR(ny, mid, c, r))
+#                         M.add_edge(mid, sf,capacity=capacityCheckR(mid, sf, c, r))
+#     maxFlow = 0
+#     for ny in ny_airports:
+#         for sf in sf_airports:
+#             if nx.has_path(M, ny, sf):
+#                 flow = nx.maximum_flow(M, ny,sf)[0]
+#             if flow >= maxFlow:
+#                 maxFlow = flow
     
-
-
-
+#     if maxFlow >= maxMaxFlow:
+#         maxMaxFlow = maxFlow
+#         maxFlowCarrier = c
+        
+# print("\n \n")
+# print("PROBLEM 2 SOLUTION \n")
+# print("Max Flow Carrier:", maxFlowCarrier, "\nMax Flow Capacity:", maxMaxFlow, "passengers")
