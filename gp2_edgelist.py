@@ -111,8 +111,7 @@ routes = routes[routes["stops"] == 0]
 ###############################################################################
 
 
-G = nx.MultiDiGraph()
-
+G = nx.DiGraph()
 
 
 
@@ -264,6 +263,9 @@ midpoints = list(dict.fromkeys(midpoints)) # removes duplicates
 ny_to_midpoint = routes_from_ny.loc[routes_from_ny["destination_airport"].isin(midpoints)]
 
 
+# Remove TTN - it is a small airport with only one budget airline 
+ny_airports.remove('TTN')
+
 
 ###############################################################################
 
@@ -277,10 +279,8 @@ for ny in ny_airports:
     for sf in sf_airports:
         if routeCheck(ny, sf) != 0:
             for c in airlineCheck(ny,sf):               # add an edge for each airline with a route from ny to sf
-                # G.add_edge(ny,sf,weight='CAPACITY', carrier=c) # CHANGE THIS WEIGHT VALUE ONCE WE HAVE CAPACITY SORTED OUT
-                
-
-                G.add_edge(ny,sf,weight=capacityCheck(ny, sf,c), carrier=c)
+             
+                G.add_edge(ny,sf,capacity=capacityCheck(ny, sf,c), carrier=c)
 
 
 # Finding routes ny -> midpoint -> sf where the carrier is the same on both legs
@@ -291,15 +291,14 @@ for ny in ny_airports:
                 if (routeCheck(mid, sf) != 0) and list(set(airlineCheck(ny,mid)) & set(airlineCheck(mid,sf))) != []: # if the same airline has routes ny -> mid and mid -> sf, then
                     carriers = list(set(airlineCheck(ny,mid)) & set(airlineCheck(mid,sf)))                           # creates list of airlines with routes ny -> mid and mid -> sf
                     for c in carriers:                                                                              # for each carrier with routes ny -> mid and mid -> sf
-                        # G.add_edge(ny,mid, weight='CAPACITY', carrier=c)                                            # add an edge for each carrier with a route from ny -> mid
-                        # G.add_edge(mid, sf, weight='CAPACITY', carrier=c)                                           # add an edge for the same carrier with a route from mid -> sf
+                        G.add_edge(ny,mid,capacity=capacityCheck(ny, mid,c), carrier=c)                                            # add an edge for each carrier with a route from ny -> mid
+                        G.add_edge(mid,sf,capacity=capacityCheck(mid, sf,c), carrier=c)                                           # add an edge for the same carrier with a route from mid -> sf
                         
-                        G.add_edge(ny,mid,weight=capacityCheck(ny, mid,c), carrier=c)
-                        G.add_edge(mid,sf,weight=capacityCheck(mid, sf,c), carrier=c)
+
                         
 
 # print(carriers)
-G.edges()
+# G.edges()
 # for sf in sf_airports:
 #     print(G.get_edge_data('SAT', sf))
 
@@ -309,4 +308,18 @@ G.edges()
 
 
 
+# for ny in ny_airports:
+#     for sf in sf_airports:
+#         if nx.has_path(G,ny,sf):
+#             print(nx.shortest_path(G,ny,sf))
 
+for ny in ny_airports:
+    for sf in sf_airports:
+        nx.maximum_flow(G, ny,sf)            
+            
+            
+# for mid in midpoints:
+#     test = (routes["source_airport"] == "TTN") & (routes['destination_airport'] == mid)
+#     test = routes[test]
+#     if 
+#     print(test)
