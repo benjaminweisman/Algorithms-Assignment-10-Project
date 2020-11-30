@@ -35,16 +35,20 @@ import matplotlib.pyplot as mp
 #                                               'equipment'])
 
 
-routes = pd.read_csv('holy_grail.csv', names = ['airline',
-                                                'airline_id',
-                                                'source_airport',
-                                                'source_airport_id',
-                                                'destination_airport',
-                                                'destination_airport_id',
-                                                'codeshare', 
-                                                'stops',
-                                                'totalcap'])
-                                                
+# routes = pd.read_csv('holy_grail.csv', names = ['airline',
+#                                                 'airline_id',
+#                                                 'source_airport',
+#                                                 'source_airport_id',
+#                                                 'destination_airport',
+#                                                 'destination_airport_id',
+#                                                 'codeshare', 
+#                                                 'stops',
+#                                                 'totalcap'])
+                  
+
+routes = pd.read_csv('holy_grail.csv')
+
+                              
 
 # Subset routes with 0 or 1 stop
 routes = routes[routes["stops"] == 0]
@@ -245,7 +249,7 @@ def capacityCheck(source, destination, carrier):
 
 # Subset Routes leaving from all NY airports
 ny_airports = ['LGA', 'JFK', 'ISP', 'SWF', 'TTN', 'HPN', 'EWR']
-# routes_from_ny = routes.loc[routes["source_airport"].isin(ny_airports)]
+routes_from_ny = routes.loc[routes["source_airport"].isin(ny_airports)]
 
 
 # Subset Routes arriving at San Francisco Airports
@@ -257,13 +261,13 @@ midpoints = list(routes_to_sf["source_airport"])
 midpoints = list(dict.fromkeys(midpoints)) # removes duplicates
 
 # Subset Routes from NY to layover airport between NY and SF
-# ny_to_midpoint = routes_from_ny.loc[routes_from_ny["destination_airport"].isin(midpoints)]
+ny_to_midpoint = routes_from_ny.loc[routes_from_ny["destination_airport"].isin(midpoints)]
 
 
 
 ###############################################################################
 
-#                            IDENTIFYING EDGES
+#                            ADDING EDGES TO GRAPH
 
 ###############################################################################
 
@@ -275,9 +279,9 @@ for ny in ny_airports:
             for c in airlineCheck(ny,sf):               # add an edge for each airline with a route from ny to sf
                 # G.add_edge(ny,sf,weight='CAPACITY', carrier=c) # CHANGE THIS WEIGHT VALUE ONCE WE HAVE CAPACITY SORTED OUT
                 
-                try:
-                    G.add_edge(ny,sf,weight=capacityCheck(ny, sf,c), carrier=c)
-                except: continue
+
+                G.add_edge(ny,sf,weight=capacityCheck(ny, sf,c), carrier=c)
+
 
 # Finding routes ny -> midpoint -> sf where the carrier is the same on both legs
 for ny in ny_airports:
@@ -289,18 +293,18 @@ for ny in ny_airports:
                     for c in carriers:                                                                              # for each carrier with routes ny -> mid and mid -> sf
                         # G.add_edge(ny,mid, weight='CAPACITY', carrier=c)                                            # add an edge for each carrier with a route from ny -> mid
                         # G.add_edge(mid, sf, weight='CAPACITY', carrier=c)                                           # add an edge for the same carrier with a route from mid -> sf
-                        try:
-                            G.add_edge(ny,mid,weight=capacityCheck(ny, mid,c), carrier=c)
-                            G.add_edge(mid,sf,weight=capacityCheck(mid, sf,c), carrier=c)
-                        except: continue
+                        
+                        G.add_edge(ny,mid,weight=capacityCheck(ny, mid,c), carrier=c)
+                        G.add_edge(mid,sf,weight=capacityCheck(mid, sf,c), carrier=c)
+                        
 
 # print(carriers)
-# G.edges()
+G.edges()
 # for sf in sf_airports:
 #     print(G.get_edge_data('SAT', sf))
 
-nx.draw_networkx(G)
-mp.show()
+# nx.draw_networkx(G)
+# mp.show()
 
 
 
