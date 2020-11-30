@@ -1,0 +1,69 @@
+---
+title: "Data Processing 1"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(data.table)
+library(readr)
+```
+```{r}
+library(readr)
+routes_dat <- read_csv("routes.dat.txt", col_names = FALSE)
+```
+
+
+
+```{r}
+routes_dat <- routes_dat %>% separate(X9, paste0('col',c(1:10)), sep = ' ', remove = T )
+routes_clean <- routes_dat[,colSums(is.na(routes_dat))<nrow(routes_dat)]
+fwrite(routes_clean, "routes_clean.csv")
+```
+
+```{r}
+routes_clean
+equip_list <- distinct(routes_clean, col1)
+
+equip_list2 <- distinct(routes_clean, col2)
+names(equip_list2)[names(equip_list2)=="col2"] <- "col1"
+
+equip_listmaster <- rbind(equip_list, equip_list2)
+
+equip_listmaster <- distinct(equip_listmaster, col1)
+
+equip_listmaster
+```
+
+```{r}
+planes_cap <- read_csv("planes_cap.csv")
+```
+
+
+```{r}
+planes_cap
+
+capacity <- merge(equip_listmaster, planes_cap, by.x = "col1", by.y = "Code3", all.x=TRUE)
+capacity
+capacity <- capacity[-c(2,4,5)]
+capacity <- capacity[-1,] 
+capacity
+
+mean(capacity$Capacity, na.rm = TRUE)
+
+capacity[,c("Capacity")][is.na(capacity[,c("Capacity")])] <- 160
+capacity
+names(capacity)[names(capacity) == "col1"] <- "Code3"
+fwrite(capacity, "capacity.csv")
+
+capacity
+```
+
+
+
+
+

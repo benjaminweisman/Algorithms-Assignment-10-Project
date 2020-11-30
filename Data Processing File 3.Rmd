@@ -1,0 +1,40 @@
+---
+title: "Data Processing File 3"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(data.table)
+library(readr)
+```
+
+
+```{r}
+replaced <- read_csv("replaced.csv")
+```
+
+
+```{r}
+replaced
+replaced <- replaced %>% separate(equipment, paste0('col',c(1:10)), sep = ' ', remove = T )
+replaced <- replaced[,colSums(is.na(replaced))<nrow(replaced)]
+replaced[,10:18] <- sapply(replaced[,10:18],as.integer)
+
+replaced <- replaced %>%
+  replace(is.na(.), 0) %>%
+  mutate(totalcap = rowSums(.[10:18]))
+
+replaced[,19][replaced[,19]==0] <- 160
+
+replaced <- replaced[-c(10:18)]
+replaced
+
+fwrite(replaced, "holy_grail.csv")
+
+```
+
