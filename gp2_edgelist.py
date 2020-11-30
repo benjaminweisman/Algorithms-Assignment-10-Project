@@ -299,6 +299,7 @@ for ny in ny_airports:
 
 
 
+
 allFlows = []
 for ny in ny_airports:
     for sf in sf_airports:
@@ -306,6 +307,74 @@ for ny in ny_airports:
         allFlows.append(nx.maximum_flow(G, ny,sf)[0])
 maxFlow = sum(allFlows)
 print("Maximum Flow:", maxFlow)
+
+
+
+##############################################################################
+
+#                               PROBLEM 2
+
+###############################################################################
+
+airline_list = [] # list of carriers for edges in G
+
+
+# Direct Edges from NY to SF
+for ny in ny_airports:
+    for sf in sf_airports:
+        if routeCheck(ny, sf) != 0:
+            for c in airlineCheck(ny,sf):               
+                airline_list.append(c)
+
+
+# Finding routes ny -> midpoint -> sf where the carrier is the same on both legs
+for ny in ny_airports:
+    for mid in midpoints:
+        if routeCheck(ny,mid) != 0:                                                                                 # if there is a route from ny -> mid, find all sf airports with route from mid
+            for sf in sf_airports:
+                if (routeCheck(mid, sf) != 0) and list(set(airlineCheck(ny,mid)) & set(airlineCheck(mid,sf))) != []: # if the same airline has routes ny -> mid and mid -> sf, then
+                    carriers = list(set(airlineCheck(ny,mid)) & set(airlineCheck(mid,sf)))                           # creates list of airlines with routes ny -> mid and mid -> sf
+                    for c in carriers:                                                                              # for each carrier with routes ny -> mid and mid -> sf
+                        airline_list.append(c)
+    
+airline_list = list(dict.fromkeys(airline_list)) # removes duplicates
+
+
+
+for c in airline_list:
+    routes = routes[routes["airline"] == f"{c}"]
+    print(routes)
+    c = nx.DiGraph()
+
+    
+
+
+
+# RESET
+routes = pd.read_csv('holy_grail.csv')
+routes = routes[routes["stops"] == 0]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -317,8 +386,6 @@ print("Maximum Flow:", maxFlow)
 
 
                         
-
-
 
 # totalFlow = 0
 # for ny in ny_airports:
