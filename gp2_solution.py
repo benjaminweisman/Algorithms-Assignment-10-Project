@@ -391,7 +391,6 @@ maxMaxFlow = 0
 
 for c in airline_list:
     r = routes[routes["airline"] == f"{c}"] # subset routes df for each airline
-
     M = nx.DiGraph()                        # initialize Directed Graph
     
     for ny in ny_airports:
@@ -399,13 +398,13 @@ for c in airline_list:
             if routeCheckR(ny, sf, r) != 0:
                 M.add_edge(ny,sf, capacity=capacityCheckR(ny,sf, c, r)) # add edges for direct routes ny -> sf
     
-    # for ny in ny_airports:
-    #     for mid in midpoints:
-    #         if routeCheckR(ny,mid,r) != 0:                                                                               
-    #             for sf in sf_airports:
-    #                 if (routeCheckR(mid, sf, r) != 0):
-    #                     M.add_edge(ny,mid,capacity=capacityCheckR(ny, mid, c, r))
-    #                     M.add_edge(mid, sf,capacity=capacityCheckR(mid, sf, c, r))
+    for ny in ny_airports:
+        for mid in midpoints:
+            if routeCheck(ny,mid) != 0:                                                                               
+                for sf in sf_airports:
+                    if (routeCheck(mid, sf) != 0):
+                        M.add_edge(ny,mid,capacity=capacityCheckR(ny, mid, c, r))
+                        M.add_edge(mid, sf,capacity=capacityCheckR(mid, sf, c, r))
     maxFlow = 0
     for ny in ny_airports:
         for sf in sf_airports:
