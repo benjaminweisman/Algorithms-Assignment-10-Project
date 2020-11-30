@@ -307,6 +307,7 @@ for ny in ny_airports:
         allFlows.append(nx.maximum_flow(G, ny,sf)[0])
 maxFlow = sum(allFlows)
 
+print("\n") 
 print("PROBLEM 1 SOLUTION \n")
 print("Maximum Flow:", maxFlow)
 
