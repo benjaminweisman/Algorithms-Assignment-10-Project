@@ -50,7 +50,23 @@ planes = pd.read_csv('planes.dat.txt', names = ['aircraft_name',
 capacity = pd.read_csv('capacity.csv')
 
 
-routes_clean = pd.read_csv('routes_clean.csv')
+routes_clean = pd.read_csv('routes_clean2.csv', names = ['airline',
+                                                         'airline_id',
+                                                         'source_airport',
+                                                         'source_airport_id',
+                                                         'destination_airport',
+                                                         'destination_airport_id',
+                                                         'codeshare', 
+                                                         'stops',
+                                                         'equipment1',
+                                                          'equipment2',
+                                                           'equipment3',
+                                                            'equipment4',
+                                                             'equipment5',
+                                                              'equipment6',
+                                                               'equipment7',
+                                                                'equipment8',
+                                                                 'equipment9'])
 
 
 ###############################################################################
@@ -65,7 +81,7 @@ routes_clean = pd.read_csv('routes_clean.csv')
 cap_dict = pd.Series(capacity.Capacity.values, index = capacity.Code3).to_dict()
 
 # Replace equipment keys with their associated capacity values
-routes.replace(to_replace=cap_dict, value=None)
+routes_clean.replace(to_replace=cap_dict, value=None)
 
 
 ###############################################################################
