@@ -24,49 +24,61 @@ import matplotlib.pyplot as mp
 
 ###############################################################################
 
-routes = pd.read_csv('routes.dat.txt', names=['airline', 
-                                              'airline_id',
-                                              'source_airport',
-                                              'source_airport_id',
-                                              'destination_airport',
-                                              'destination_airport_id',
-                                              'codeshare', 
-                                              'stops',
-                                              'equipment'])
+# routes = pd.read_csv('routes.dat.txt', names=['airline', 
+#                                               'airline_id',
+#                                               'source_airport',
+#                                               'source_airport_id',
+#                                               'destination_airport',
+#                                               'destination_airport_id',
+#                                               'codeshare', 
+#                                               'stops',
+#                                               'equipment'])
+
+
+routes = pd.read_csv('holy_grail.csv', names = ['airline',
+                                                'airline_id',
+                                                'source_airport',
+                                                'source_airport_id',
+                                                'destination_airport',
+                                                'destination_airport_id',
+                                                'codeshare', 
+                                                'stops',
+                                                'totalcap'])
+                                                
 
 # Subset routes with 0 or 1 stop
 routes = routes[routes["stops"] == 0]
 
 
-planes = pd.read_csv('planes.dat.txt', names = ['aircraft_name',
-                                                'IATA_code',
-                                                'ICAO_code'])
+# planes = pd.read_csv('planes.dat.txt', names = ['aircraft_name',
+#                                                 'IATA_code',
+#                                                 'ICAO_code'])
 
 
 # # Plane Capacities
 # caps = pd.read_csv('planes_cap.csv', names=['Name', 'Code3', 'Code4', 'Model', 'Capacity',])
 
 # Plane Capacities
-capacity = pd.read_csv('capacity.csv')
+# capacity = pd.read_csv('capacity.csv')
 
 
-routes_clean = pd.read_csv('routes_clean2.csv', names = ['airline',
-                                                          'airline_id',
-                                                          'source_airport',
-                                                          'source_airport_id',
-                                                          'destination_airport',
-                                                          'destination_airport_id',
-                                                          'codeshare', 
-                                                          'stops',
-                                                          'equipment1',
-                                                          'equipment2',
-                                                            'equipment3',
-                                                            'equipment4',
-                                                              'equipment5',
-                                                              'equipment6',
-                                                                'equipment7',
-                                                                'equipment8',
-                                                                  'equipment9'])
+# routes_clean = pd.read_csv('routes_clean2.csv', names = ['airline',
+#                                                           'airline_id',
+#                                                           'source_airport',
+#                                                           'source_airport_id',
+#                                                           'destination_airport',
+#                                                           'destination_airport_id',
+#                                                           'codeshare', 
+#                                                           'stops',
+#                                                           'equipment1',
+#                                                           'equipment2',
+#                                                             'equipment3',
+#                                                             'equipment4',
+#                                                               'equipment5',
+#                                                               'equipment6',
+#                                                                 'equipment7',
+#                                                                 'equipment8',
+#                                                                   'equipment9'])
 
 # routes_clean = pd.read_csv('routes_clean2.csv', dtype = {"col1": "string", "col2": "string","col3": "string","col4": "string","col5": "string","col6":"string","col7": "string","col8": "string","col9": "string" })
 
@@ -76,16 +88,16 @@ routes_clean = pd.read_csv('routes_clean2.csv', names = ['airline',
 
 ###############################################################################
 
-routes.reset_index()
+# routes.reset_index()
 
 # # split multi-value equipment fields
 # routes = pd.DataFrame(routes.equipment.str.split(" ").tolist(), index=routes.index).stack()
 
 # Create dictionary of equipment : capacity values
-cap_dict = pd.Series(capacity.Capacity.values, index = capacity.Code3).to_dict()
+# cap_dict = pd.Series(capacity.Capacity.values, index = capacity.Code3).to_dict()
 
 # Replace equipment keys with their associated capacity values
-routes = routes.replace(to_replace=cap_dict, value=None)
+# routes = routes.replace(to_replace=cap_dict, value=None)
 
 
 ###############################################################################
@@ -126,27 +138,27 @@ def routeCheck(source, destination):
     return len(routes_list)
     # print(len(routes_list), "direct routes")
 
-routeCheck('JFK', 'SFO')
+# routeCheck('JFK', 'SFO')
 
 
-def equipCheck(source, destination):
-    '''
-    Parameters
-    ----------
-    source : string
-        source airport code (eg. JFK, LGA)
+# def equipCheck(source, destination):
+#     '''
+#     Parameters
+#     ----------
+#     source : string
+#         source airport code (eg. JFK, LGA)
     
-    destination: string
-        destination airport code (eg. SFO, OAK, SJC)
+#     destination: string
+#         destination airport code (eg. SFO, OAK, SJC)
 
-    Returns
-    -------
-    list of equipment for each route between source and destination
+#     Returns
+#     -------
+#     list of equipment for each route between source and destination
     
-    '''
-    routes_list = (routes["source_airport"] == f"{source}") & (routes["destination_airport"] == f"{destination}")
-    routes_list = routes[routes_list]
-    return list(routes_list["equipment"])
+#     '''
+#     routes_list = (routes["source_airport"] == f"{source}") & (routes["destination_airport"] == f"{destination}")
+#     routes_list = routes[routes_list]
+#     return list(routes_list["equipment"])
 
 
 
@@ -171,6 +183,32 @@ def airlineCheck(source, destination):
 
 
 
+# def capacityCheck(source, destination, carrier):
+#     '''
+#     Parameters
+#     ----------
+#     source : string
+#         source airport code (eg. JFK, LGA)
+    
+#     destination: string
+#         destination airport code (eg. SFO, OAK, SJC)
+        
+#     carrier: string
+#         airline carrier for a given route
+
+#     Returns
+#     -------
+#     capacity of route between source and destination for a given airline
+    
+#     '''
+#     cap = 0
+#     routes_list = (routes["source_airport"] == f"{source}") & (routes["destination_airport"] == f"{destination}") & (routes["airline"] == f"{carrier}")
+#     routes_list = routes[routes_list]
+#     for e in routes_list["equipment"]:
+#         cap += int(e)
+#     return cap
+    
+
 def capacityCheck(source, destination, carrier):
     '''
     Parameters
@@ -189,13 +227,13 @@ def capacityCheck(source, destination, carrier):
     capacity of route between source and destination for a given airline
     
     '''
-    cap = 0
+    # cap = 0
     routes_list = (routes["source_airport"] == f"{source}") & (routes["destination_airport"] == f"{destination}") & (routes["airline"] == f"{carrier}")
     routes_list = routes[routes_list]
-    for e in routes_list["equipment"]:
-        cap += int(e)
-    return cap
-    
+    # for e in routes_list["totalcap"]:
+        # cap += int(e)
+    # return cap
+    return routes_list["totalcap"]
 
 ###############################################################################
 
@@ -207,7 +245,7 @@ def capacityCheck(source, destination, carrier):
 
 # Subset Routes leaving from all NY airports
 ny_airports = ['LGA', 'JFK', 'ISP', 'SWF', 'TTN', 'HPN', 'EWR']
-routes_from_ny = routes.loc[routes["source_airport"].isin(ny_airports)]
+# routes_from_ny = routes.loc[routes["source_airport"].isin(ny_airports)]
 
 
 # Subset Routes arriving at San Francisco Airports
@@ -219,7 +257,7 @@ midpoints = list(routes_to_sf["source_airport"])
 midpoints = list(dict.fromkeys(midpoints)) # removes duplicates
 
 # Subset Routes from NY to layover airport between NY and SF
-ny_to_midpoint = routes_from_ny.loc[routes_from_ny["destination_airport"].isin(midpoints)]
+# ny_to_midpoint = routes_from_ny.loc[routes_from_ny["destination_airport"].isin(midpoints)]
 
 
 
