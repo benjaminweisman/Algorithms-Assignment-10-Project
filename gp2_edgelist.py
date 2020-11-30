@@ -51,23 +51,24 @@ capacity = pd.read_csv('capacity.csv')
 
 
 routes_clean = pd.read_csv('routes_clean2.csv', names = ['airline',
-                                                         'airline_id',
-                                                         'source_airport',
-                                                         'source_airport_id',
-                                                         'destination_airport',
-                                                         'destination_airport_id',
-                                                         'codeshare', 
-                                                         'stops',
-                                                         'equipment1',
+                                                          'airline_id',
+                                                          'source_airport',
+                                                          'source_airport_id',
+                                                          'destination_airport',
+                                                          'destination_airport_id',
+                                                          'codeshare', 
+                                                          'stops',
+                                                          'equipment1',
                                                           'equipment2',
-                                                           'equipment3',
+                                                            'equipment3',
                                                             'equipment4',
-                                                             'equipment5',
+                                                              'equipment5',
                                                               'equipment6',
-                                                               'equipment7',
+                                                                'equipment7',
                                                                 'equipment8',
-                                                                 'equipment9'])
+                                                                  'equipment9'])
 
+# routes_clean = pd.read_csv('routes_clean2.csv', dtype = {"col1": "string", "col2": "string","col3": "string","col4": "string","col5": "string","col6":"string","col7": "string","col8": "string","col9": "string" })
 
 ###############################################################################
 
@@ -75,13 +76,16 @@ routes_clean = pd.read_csv('routes_clean2.csv', names = ['airline',
 
 ###############################################################################
 
+routes.reset_index()
 
+# # split multi-value equipment fields
+# routes = pd.DataFrame(routes.equipment.str.split(" ").tolist(), index=routes.index).stack()
 
 # Create dictionary of equipment : capacity values
 cap_dict = pd.Series(capacity.Capacity.values, index = capacity.Code3).to_dict()
 
 # Replace equipment keys with their associated capacity values
-routes_clean.replace(to_replace=cap_dict, value=None)
+routes = routes.replace(to_replace=cap_dict, value=None)
 
 
 ###############################################################################
@@ -165,8 +169,10 @@ def airlineCheck(source, destination):
     routes_list = routes[routes_list]
     return list(routes_list["airline"])
 
+
+
 def capacityCheck(source, destination, carrier):
-        '''
+    '''
     Parameters
     ----------
     source : string
@@ -183,7 +189,12 @@ def capacityCheck(source, destination, carrier):
     capacity of route between source and destination for a given airline
     
     '''
-
+    cap = 0
+    routes_list = (routes["source_airport"] == f"{source}") & (routes["destination_airport"] == f"{destination}") & (routes["airline"] == f"{carrier}")
+    routes_list = routes[routes_list]
+    for e in routes_list["equipment"]:
+        cap += int(e)
+    return cap
     
 
 ###############################################################################
@@ -224,8 +235,11 @@ for ny in ny_airports:
     for sf in sf_airports:
         if routeCheck(ny, sf) != 0:
             for c in airlineCheck(ny,sf):               # add an edge for each airline with a route from ny to sf
-                G.add_edge(ny,sf,weight='CAPACITY', carrier=c) # CHANGE THIS WEIGHT VALUE ONCE WE HAVE CAPACITY SORTED OUT
-            
+                # G.add_edge(ny,sf,weight='CAPACITY', carrier=c) # CHANGE THIS WEIGHT VALUE ONCE WE HAVE CAPACITY SORTED OUT
+                
+                try:
+                    G.add_edge(ny,sf,weight=capacityCheck(ny, sf,c), carrier=c)
+                except: continue
 
 # Finding routes ny -> midpoint -> sf where the carrier is the same on both legs
 for ny in ny_airports:
@@ -235,15 +249,17 @@ for ny in ny_airports:
                 if (routeCheck(mid, sf) != 0) and list(set(airlineCheck(ny,mid)) & set(airlineCheck(mid,sf))) != []: # if the same airline has routes ny -> mid and mid -> sf, then
                     carriers = list(set(airlineCheck(ny,mid)) & set(airlineCheck(mid,sf)))                           # creates list of airlines with routes ny -> mid and mid -> sf
                     for c in carriers:                                                                              # for each carrier with routes ny -> mid and mid -> sf
-                        G.add_edge(ny,mid, weight='CAPACITY', carrier=c)                                            # add an edge for each carrier with a route from ny -> mid
-                        G.add_edge(mid, sf, weight='CAPACITY', carrier=c)                                           # add an edge for the same carrier with a route from mid -> sf
+                        # G.add_edge(ny,mid, weight='CAPACITY', carrier=c)                                            # add an edge for each carrier with a route from ny -> mid
+                        # G.add_edge(mid, sf, weight='CAPACITY', carrier=c)                                           # add an edge for the same carrier with a route from mid -> sf
+                        try:
+                            G.add_edge(ny,mid,weight=capacityCheck(ny, mid,c), carrier=c)
+                            G.add_edge(mid,sf,weight=capacityCheck(mid, sf,c), carrier=c)
+                        except: continue
 
-                    
-
-print(carriers)
-G.edges()
-for sf in sf_airports:
-    print(G.get_edge_data('SAT', sf))
+# print(carriers)
+# G.edges()
+# for sf in sf_airports:
+#     print(G.get_edge_data('SAT', sf))
 
 
 
