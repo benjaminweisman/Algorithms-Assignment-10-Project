@@ -104,15 +104,6 @@ routes = routes[routes["stops"] == 0]
 # routes = routes.replace(to_replace=cap_dict, value=None)
 
 
-###############################################################################
-
-#                           INITIALIZE NETWORKX GRAPH
-
-###############################################################################
-
-
-G = nx.DiGraph()
-
 
 
 ###############################################################################
@@ -236,7 +227,7 @@ def capacityCheck(source, destination, carrier):
     # for e in routes_list["totalcap"]:
         # cap += int(e)
     # return cap
-    return routes_list["totalcap"]
+    return sum(routes_list["totalcap"])
 
 ###############################################################################
 
@@ -265,6 +256,17 @@ ny_to_midpoint = routes_from_ny.loc[routes_from_ny["destination_airport"].isin(m
 
 # Remove TTN - it is a small airport with only one budget airline 
 ny_airports.remove('TTN')
+
+
+###############################################################################
+
+#                           INITIALIZE NETWORKX GRAPH
+
+###############################################################################
+
+
+G = nx.DiGraph()
+
 
 
 ###############################################################################
@@ -315,7 +317,7 @@ for ny in ny_airports:
 
 for ny in ny_airports:
     for sf in sf_airports:
-        nx.maximum_flow(G, ny,sf)            
+        print(nx.maximum_flow(G, ny,sf))            
             
             
 # for mid in midpoints:
