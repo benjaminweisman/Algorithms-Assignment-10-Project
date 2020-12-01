@@ -80,27 +80,7 @@ def routeCheck(source, destination):
     return len(routes_list)
     # print(len(routes_list), "direct routes")
 
-# routeCheck('JFK', 'SFO')
 
-
-# def equipCheck(source, destination):
-#     '''
-#     Parameters
-#     ----------
-#     source : string
-#         source airport code (eg. JFK, LGA)
-    
-#     destination: string
-#         destination airport code (eg. SFO, OAK, SJC)
-
-#     Returns
-#     -------
-#     list of equipment for each route between source and destination
-    
-#     '''
-#     routes_list = (routes["source_airport"] == f"{source}") & (routes["destination_airport"] == f"{destination}")
-#     routes_list = routes[routes_list]
-#     return list(routes_list["equipment"])
 
 
 
@@ -125,30 +105,7 @@ def airlineCheck(source, destination):
 
 
 
-# def capacityCheck(source, destination, carrier):
-#     '''
-#     Parameters
-#     ----------
-#     source : string
-#         source airport code (eg. JFK, LGA)
-    
-#     destination: string
-#         destination airport code (eg. SFO, OAK, SJC)
-        
-#     carrier: string
-#         airline carrier for a given route
 
-#     Returns
-#     -------
-#     capacity of route between source and destination for a given airline
-    
-#     '''
-#     cap = 0
-#     routes_list = (routes["source_airport"] == f"{source}") & (routes["destination_airport"] == f"{destination}") & (routes["airline"] == f"{carrier}")
-#     routes_list = routes[routes_list]
-#     for e in routes_list["equipment"]:
-#         cap += int(e)
-#     return cap
     
 
 def capacityCheck(source, destination, carrier):
@@ -186,7 +143,7 @@ def capacityCheck(source, destination, carrier):
 
 
 # Subset Routes leaving from all NY airports
-ny_airports = ['LGA', 'JFK', 'ISP', 'SWF', 'TTN', 'HPN', 'EWR']
+ny_airports = ['LGA', 'JFK', 'ISP', 'SWF', 'HPN', 'EWR']
 routes_from_ny = routes.loc[routes["source_airport"].isin(ny_airports)]
 
 
@@ -202,8 +159,7 @@ midpoints = list(dict.fromkeys(midpoints)) # removes duplicates
 ny_to_midpoint = routes_from_ny.loc[routes_from_ny["destination_airport"].isin(midpoints)]
 
 
-# Remove TTN - it is a small airport with only one budget airline 
-ny_airports.remove('TTN')
+
 
 
 ###############################################################################
@@ -345,13 +301,13 @@ for c in airline_list:
                 if routeCheckR(ny,sf,r):
                     M.add_edge(ny,sf, capacity = capacityCheckR(ny,sf,c,r))
                     
-                    # print("LINE ONE",capacityCheckR(ny,sf,c,r))
+
                     
                 if routeCheckR(ny,mid,r) and routeCheckR(mid,sf,r):
                     M.add_edge(ny,mid,capacity = capacityCheckR(ny,mid,c,r))
                     M.add_edge(mid,sf,capacity = capacityCheckR(mid,sf,c,r))
                     
-                    # print("LINE TWO",capacityCheckR(ny,mid,c,r), capacityCheckR(mid,sf,c,r)) # the problem is with capacityCheckR?
+
     for u in M:
         for v in M:
             if u != v:
@@ -368,7 +324,7 @@ for c in airline_list:
 
 print("\n \n")
 print("PROBLEM 2 SOLUTION \n")
-print("Max Flow Carrier:", maxFlowCarrier, "\nMax Flow Capacity:", solution, "passengers")
+print("Max Flow Carrier:", maxFlowCarrier, f"\nMax Flow Capacity for {maxFlowCarrier}:", solution, "passengers")
 
 
 
