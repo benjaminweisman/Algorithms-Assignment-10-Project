@@ -15,7 +15,7 @@ Created on Sun Nov 29 16:16:54 2020
 
 import pandas as pd
 import networkx as nx
-import matplotlib.pyplot as mp
+# import matplotlib.pyplot as mp
 
 
 ###############################################################################
@@ -25,32 +25,13 @@ import matplotlib.pyplot as mp
 ###############################################################################
 
 
+
 routes = pd.read_csv('Data Processing/holy_grail.csv')
 
                               
 
 # Subset Nonstop Routes
 routes = routes[routes["stops"] == 0]
-
-
-
-###############################################################################
-
-#                    REPLACE EQUIPMENT VALUES WITH CAPACITY
-
-###############################################################################
-
-# routes.reset_index()
-
-# # split multi-value equipment fields
-# routes = pd.DataFrame(routes.equipment.str.split(" ").tolist(), index=routes.index).stack()
-
-# Create dictionary of equipment : capacity values
-# cap_dict = pd.Series(capacity.Capacity.values, index = capacity.Code3).to_dict()
-
-# Replace equipment keys with their associated capacity values
-# routes = routes.replace(to_replace=cap_dict, value=None)
-
 
 
 
@@ -286,7 +267,7 @@ for ny in ny_airports:
                 if (routeCheck(mid, sf) != 0) and list(set(airlineCheck(ny,mid)) & set(airlineCheck(mid,sf))) != []: # if the same airline has routes ny -> mid and mid -> sf, then
                     carriers = list(set(airlineCheck(ny,mid)) & set(airlineCheck(mid,sf)))                           # creates list of airlines with routes ny -> mid and mid -> sf
                     for c in carriers:                                                                              # for each carrier with routes ny -> mid and mid -> sf
-                        airline_list.append(c)
+                        airline_list.append(c)                                                                      # add the carrier to airline_list
     
 airline_list = list(dict.fromkeys(airline_list)) # removes duplicates
 
