@@ -24,67 +24,15 @@ import matplotlib.pyplot as mp
 
 ###############################################################################
 
-# routes = pd.read_csv('routes.dat.txt', names=['airline', 
-#                                               'airline_id',
-#                                               'source_airport',
-#                                               'source_airport_id',
-#                                               'destination_airport',
-#                                               'destination_airport_id',
-#                                               'codeshare', 
-#                                               'stops',
-#                                               'equipment'])
 
-
-# routes = pd.read_csv('holy_grail.csv', names = ['airline',
-#                                                 'airline_id',
-#                                                 'source_airport',
-#                                                 'source_airport_id',
-#                                                 'destination_airport',
-#                                                 'destination_airport_id',
-#                                                 'codeshare', 
-#                                                 'stops',
-#                                                 'totalcap'])
-                  
-
-routes = pd.read_csv('holy_grail.csv')
+routes = pd.read_csv('Data Processing/holy_grail.csv')
 
                               
 
-# Subset routes with 0 or 1 stop
+# Subset Nonstop Routes
 routes = routes[routes["stops"] == 0]
 
 
-# planes = pd.read_csv('planes.dat.txt', names = ['aircraft_name',
-#                                                 'IATA_code',
-#                                                 'ICAO_code'])
-
-
-# # Plane Capacities
-# caps = pd.read_csv('planes_cap.csv', names=['Name', 'Code3', 'Code4', 'Model', 'Capacity',])
-
-# Plane Capacities
-# capacity = pd.read_csv('capacity.csv')
-
-
-# routes_clean = pd.read_csv('routes_clean2.csv', names = ['airline',
-#                                                           'airline_id',
-#                                                           'source_airport',
-#                                                           'source_airport_id',
-#                                                           'destination_airport',
-#                                                           'destination_airport_id',
-#                                                           'codeshare', 
-#                                                           'stops',
-#                                                           'equipment1',
-#                                                           'equipment2',
-#                                                             'equipment3',
-#                                                             'equipment4',
-#                                                               'equipment5',
-#                                                               'equipment6',
-#                                                                 'equipment7',
-#                                                                 'equipment8',
-#                                                                   'equipment9'])
-
-# routes_clean = pd.read_csv('routes_clean2.csv', dtype = {"col1": "string", "col2": "string","col3": "string","col4": "string","col5": "string","col6":"string","col7": "string","col8": "string","col9": "string" })
 
 ###############################################################################
 
